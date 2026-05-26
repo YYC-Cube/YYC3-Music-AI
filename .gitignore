@@ -1,0 +1,22 @@
+node_modules/
+.pnpm-store/
+dist/
+*.local
+.env
+.env.*
+!.env.example
+
+.DS_Store
+*.log
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build
+*.tsbuildinfo
+
+# YYC3 团队标规文档（仅本地使用，不提交远程）
+docs/YYC3-团队通用-标规闭环/

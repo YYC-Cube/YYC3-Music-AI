@@ -1,0 +1,50 @@
+{
+  "name": "D MusAI",
+  "short_name": "D MusAI",
+  "description": "D MusAI 原创音乐播放器 - 沉浸式 CoverFlow 3D 音乐体验",
+  "start_url": "https://music-ai.yyc3.top/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/D-brand/android/mipmap-mdpi/ic_launcher.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/D-brand/android/mipmap-hdpi/ic_launcher.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/D-brand/android/mipmap-xhdpi/ic_launcher.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/D-brand/android/mipmap-xxhdpi/ic_launcher.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/D-brand/android/mipmap-xxxhdpi/ic_launcher.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/D-brand/macos/AppIcon.iconset/icon_512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/D-brand/ios/AppIcon.appiconset/Icon-App-1024x1024@1x.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["music", "entertainment"],
+  "lang": "zh-CN"
+}
