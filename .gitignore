@@ -20,3 +20,7 @@ dist/
 
 # YYC3 团队标规文档（仅本地使用，不提交远程）
 docs/YYC3-团队通用-标规闭环/
+
+# Python
+__pycache__/
+*.pyc
