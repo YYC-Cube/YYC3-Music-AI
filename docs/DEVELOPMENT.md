@@ -1,3 +1,31 @@
+---
+file: DEVELOPMENT.md
+description: D MusAI 开发规范文档，覆盖技术栈、目录结构、命名与编码约定
+author: YanYuCloudCube Team <admin@0379.email>
+version: v1.0.0
+created: 2026-05-26
+updated: 2026-11-02
+status: stable
+tags: [开发规范],[技术栈],[目录结构]
+---
+
+> ***YanYuCloudCube***
+> *言启象限 | 语枢未来*
+> ***Words Initiate Quadrants, Language Serves as Core for Future***
+> *万象归元于云枢 | 深栈智启新纪元*
+> ***All things converge in cloud pivot; Deep stacks ignite a new era of intelligence***
+
+---
+
+## 核心理念
+
+**五高架构**：高可用 | 高性能 | 高安全 | 高扩展 | 高智能
+**五标体系**：标准化 | 规范化 | 自动化 | 可视化 | 智能化
+**五化转型**：流程化 | 数字化 | 生态化 | 工具化 | 服务化
+**五维评估**：时间维 | 空间维 | 属性维 | 事件维 | 关联维
+
+---
+
 # 开发规范文档
 
 ## 技术栈
@@ -137,3 +165,15 @@ console.error('音频加载失败:', audioPath, err);
 | 自动播放被阻止 | 浏览器安全策略 | 用户点击播放按钮 |
 | 切歌后旧歌继续 | Audio 资源未释放 | removeAttribute('src') + load() |
 | 封面不显示 | 路径错误 | 检查 /D-cover/ 目录 |
+
+---
+
+<div align="center">
+
+> 「***YanYuCloudCube***」
+> 「***<admin@0379.email>***」
+> 「***Words Initiate Quadrants, Language Serves as Core for the Future***」
+> 「***All things converge in cloud pivot; Deep stacks ignite a new era of intelligence***」
+
+**© 2025-2026 YYC³ Team. All Rights Reserved.**
+</div>
