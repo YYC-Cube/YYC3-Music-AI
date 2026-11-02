@@ -6,7 +6,7 @@ description: YYC³ Music-player 文档架构闭环生成引擎 v3.1.0 — 基于
 author: YanYuCloudCube Team <admin@0379.email>
 version: v3.1.0
 created: 2026-02-18
-updated: 2026-05-25
+updated: 2026-11-02
 status: stable
 tags: [文档引擎],[闭环管理],[五高五标五化],[D-Music-99]
 
@@ -165,8 +165,13 @@ class TraceRecord:
 class YYC3MusicDocumentEngine:
 
     def __init__(self, output_dir: str = "docs", project_root: str = "."):
-        self.output_dir = Path(output_dir)
-        self.project_root = Path(project_root)
+        self.project_root = Path(project_root).expanduser().resolve()
+        self.output_dir = Path(output_dir).expanduser().resolve()
+        # 安全防护: 输出目录必须位于项目根目录内, 防止路径穿越
+        if self.output_dir != self.project_root and self.project_root not in self.output_dir.parents:
+            raise ValueError(
+                f"输出目录越界: {self.output_dir} 不在项目根目录 {self.project_root} 内"
+            )
         self.document_registry: Dict[str, DocumentMetadata] = {}
         self.traceability_chain: List[Dict] = []
         self.history_dir = self.output_dir / ".history"
@@ -174,6 +179,14 @@ class YYC3MusicDocumentEngine:
 
         if self.registry_path.exists():
             self._load_registry()
+
+    def _ensure_within_output(self, path: Path) -> Path:
+        """确保写入路径位于输出目录内, 防止路径穿越写入。"""
+        base = self.output_dir.resolve()
+        resolved = path.resolve()
+        if base != resolved and base not in resolved.parents:
+            raise ValueError(f"路径越界, 拒绝写入: {resolved} (允许目录: {base})")
+        return resolved
 
     def generate_checksum(self, content: str) -> str:
         return hashlib.sha256(content.encode('utf-8')).hexdigest()[:16]
@@ -222,7 +235,8 @@ class YYC3MusicDocumentEngine:
                 "updated": meta.updated,
             }
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        with open(self.registry_path, 'w', encoding='utf-8') as f:
+        registry_path = self._ensure_within_output(self.registry_path)
+        with open(registry_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
     def register_document(self, metadata: DocumentMetadata) -> None:
@@ -261,12 +275,13 @@ class YYC3MusicDocumentEngine:
             self.history_dir.mkdir(parents=True, exist_ok=True)
         ts = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         archive_name = f"{file_path.stem}__{metadata.version}__{ts}{file_path.suffix}"
-        shutil.copy2(file_path, self.history_dir / archive_name)
+        archive_path = self._ensure_within_output(self.history_dir / archive_name)
+        shutil.copy2(file_path, archive_path)
         logger.info(f"历史版本已归档: {archive_name}")
 
     def save_document(self, content: str, output_path: str, metadata: Optional[DocumentMetadata] = None) -> bool:
         try:
-            path = Path(output_path)
+            path = self._ensure_within_output(Path(output_path))
             path.parent.mkdir(parents=True, exist_ok=True)
 
             diff_summary = ""
@@ -1260,10 +1275,21 @@ def main():
     args = parser.parse_args()
 
     if args.clean and os.path.exists(args.output):
+        clean_root = Path(args.output).expanduser().resolve()
+        project_root = Path(args.project_root).expanduser().resolve()
+        if clean_root == project_root or project_root not in clean_root.parents:
+            logger.error(
+                f"拒绝清理: 输出目录 {clean_root} 必须是项目根目录 {project_root} 的子目录"
+            )
+            sys.exit(1)
         shutil.rmtree(args.output)
         logger.info(f"已清理文档目录: {args.output}")
 
-    engine = YYC3MusicDocumentEngine(output_dir=args.output, project_root=args.project_root)
+    try:
+        engine = YYC3MusicDocumentEngine(output_dir=args.output, project_root=args.project_root)
+    except ValueError as e:
+        logger.error(f"❌ {e}")
+        sys.exit(1)
     generator = DocumentContentGenerator(engine)
 
     if args.validate:
