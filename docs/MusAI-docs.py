@@ -1272,6 +1272,18 @@ def main():
         help='验证现有文档是否符合规范'
     )
     parser.add_argument(
+        '--baseline', '-b',
+        default=None,
+        metavar='PATH',
+        help='基线门禁 (配合 --validate): 仅拦截基线之外的新增失败文档'
+    )
+    parser.add_argument(
+        '--update-baseline',
+        default=None,
+        metavar='PATH',
+        help='将当前失败文档列表写入基线文件 (治理后运行以收紧基线)'
+    )
+    parser.add_argument(
         '--clean', '-c',
         action='store_true',
         help='清理并重新生成所有文档'
@@ -1297,6 +1309,24 @@ def main():
         sys.exit(1)
     generator = DocumentContentGenerator(engine)
 
+    if args.update_baseline:
+        results = engine.batch_validate(args.output)
+        failing = sorted(os.path.normpath(p) for p, (ok, _e) in results.items() if not ok)
+        baseline_data = {
+            "updated": datetime.datetime.now().strftime("%Y-%m-%d"),
+            "total_documents": len(results),
+            "failing_count": len(failing),
+            "failing": failing,
+        }
+        baseline_path = Path(args.update_baseline)
+        baseline_path.parent.mkdir(parents=True, exist_ok=True)
+        baseline_path.write_text(
+            json.dumps(baseline_data, ensure_ascii=False, indent=2) + "\n",
+            encoding='utf-8'
+        )
+        logger.info(f"基线已更新: {baseline_path} (失败 {len(failing)}/{len(results)})")
+        return
+
     if args.validate:
         results = engine.batch_validate(args.output)
         total = len(results)
@@ -1309,6 +1339,29 @@ def main():
             if not ok:
                 for err in errors:
                     logger.warning(f"  - {err}")
+
+        if args.baseline:
+            baseline_path = Path(args.baseline)
+            if not baseline_path.exists():
+                logger.error(f"❌ 基线文件不存在: {args.baseline} (可先运行 --update-baseline 生成)")
+                sys.exit(1)
+            baseline_data = json.loads(baseline_path.read_text(encoding='utf-8'))
+            baseline_set = {os.path.normpath(p) for p in baseline_data.get('failing', [])}
+            current_set = {os.path.normpath(p) for p, (ok, _e) in results.items() if not ok}
+            new_failures = sorted(current_set - baseline_set)
+            fixed = sorted(baseline_set - current_set)
+            if fixed:
+                logger.info(f"🎉 {len(fixed)} 个基线内文件已修复, 可运行 --update-baseline 收紧基线:")
+                for p in fixed:
+                    logger.info(f"  ✅ {p}")
+            if new_failures:
+                logger.error(f"❌ 基线门禁失败: {len(new_failures)} 个新增不合格文档:")
+                for p in new_failures:
+                    logger.error(f"  ❌ {p}")
+                    for err in results[p][1]:
+                        logger.error(f"      - {err}")
+                sys.exit(1)
+            logger.info(f"✅ 基线门禁通过: 无新增不合格文档 (对照基线 {len(baseline_set)} 项)")
         return
 
     document_root = args.output

@@ -1,0 +1,33 @@
+{
+  "updated": "2026-11-02",
+  "total_documents": 260,
+  "failing_count": 26,
+  "failing": [
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-02.md",
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-03.md",
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-04.md",
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-05.md",
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-07.md",
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-08.md",
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-09.md",
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-10.md",
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-11.md",
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-Audit-Phase3.md",
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-Developer-Guide.md",
+    "docs/10-YYC3-Music-player-规划设计指南/D-Music-Implementation-Plan.md",
+    "docs/10-YYC3-Music-player-规划设计指南/Figma_AI_Prompts.md",
+    "docs/10-YYC3-Music-player-规划设计指南/Guidelines-EN.md",
+    "docs/10-YYC3-Music-player-规划设计指南/Guidelines.1.md",
+    "docs/10-YYC3-Music-player-规划设计指南/Guidelines.md",
+    "docs/10-YYC3-Music-player-规划设计指南/Guidelines_Prompts.md",
+    "docs/10-YYC3-Music-player-规划设计指南/ProgressReport-Phase1.md",
+    "docs/10-YYC3-Music-player-规划设计指南/ProgressReport-Phase2.md",
+    "docs/10-YYC3-Music-player-规划设计指南/SpaceTime.md",
+    "docs/10-YYC3-Music-player-规划设计指南/WilsonScore.md",
+    "docs/API.md",
+    "docs/ARCHITECTURE.md",
+    "docs/DEPLOYMENT.md",
+    "docs/DEVELOPMENT.md",
+    "docs/PWA.md"
+  ]
+}
