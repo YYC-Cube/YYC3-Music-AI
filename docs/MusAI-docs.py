@@ -165,6 +165,10 @@ class TraceRecord:
 class YYC3MusicDocumentEngine:
 
     def __init__(self, output_dir: str = "docs", project_root: str = "."):
+        # 安全防护: 字符串层拒绝 '..' 路径段, 阻断相对路径穿越
+        for label, raw in (("输出目录", output_dir), ("项目根目录", project_root)):
+            if '..' in Path(raw).parts:
+                raise ValueError(f"{label}含 '..' 路径段, 已拒绝: {raw}")
         self.project_root = Path(project_root).expanduser().resolve()
         self.output_dir = Path(output_dir).expanduser().resolve()
         # 安全防护: 输出目录必须位于项目根目录内, 防止路径穿越
